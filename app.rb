@@ -31,6 +31,37 @@ configure do
   # check logged in
 end
 
+Mongoid.configure do |config|
+  name = "articles"
+  host = "localhost"
+  config.master = Mongo::Connection.new.db(name)
+  config.persist_in_safe_mode = false
+end
+
+class Article
+  include Mongoid::Document
+
+  field :title
+  field :content
+end
+get '/' do
+  @articles = Article.all
+end
+get '/show/:id' do
+  @article = Article.find(params[:id])
+end
+get '/new' do
+  haml :new
+end
+post '/create' do
+  @article = Article.new(params['article'])
+  if @article.save
+    redirect '/'
+  else
+    redirect '/new'
+  end
+end
+
 before do
   content_type 'html'
 end
