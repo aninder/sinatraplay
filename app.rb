@@ -31,12 +31,13 @@ configure do
   # check logged in
 end
 
-Mongoid.configure do |config|
-  name = "articles"
-  host = "localhost"
-  config.master = Mongo::Connection.new.db(name)
-  config.persist_in_safe_mode = false
-end
+Mongoid.load!("./mongoid.yml", :production)
+# Mongoid.configure do |config|
+#   name = "articles"
+#   host = "localhost"
+#   config.master = Mongo::Connection.new.db(name)
+#   config.persist_in_safe_mode = false
+# end
 
 class Article
   include Mongoid::Document
